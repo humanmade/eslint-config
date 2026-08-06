@@ -3,76 +3,67 @@
 [![npm](https://img.shields.io/npm/v/@humanmade/eslint-config)](https://www.npmjs.com/package/@humanmade/eslint-config)
 [![Tests](https://github.com/humanmade/eslint-config/actions/workflows/test.yml/badge.svg)](https://github.com/humanmade/eslint-config/actions/workflows/test.yml)
 
-Human Made coding standards for JavaScript, for ESLint v9+ using flat config format.
+Human Made coding standards for JavaScript, layered over [`@wordpress/eslint-plugin`](https://www.npmjs.com/package/@wordpress/eslint-plugin).
+
+## Requirements
+
+- ESLint 9 or 10
+- Node 22+
+
+## Installation
+
+```bash
+npm install --save-dev @humanmade/eslint-config
+```
+
+Every plugin the config uses ships with it. ESLint is the only peer dependency.
 
 ## Usage
 
-**Required**: Create an `eslint.config.js` file in your project root (ESLint 9+ flat config format):
+Create an `eslint.config.js` in your project root:
 
-### Basic Usage
 ```js
-import humanmadeConfig from '@humanmade/eslint-config';
+import humanmade from '@humanmade/eslint-config';
 
-export default humanmadeConfig;
+export default humanmade;
 ```
 
-### With Custom Overrides
+To override:
+
 ```js
-import humanmadeConfig from '@humanmade/eslint-config';
+import humanmade from '@humanmade/eslint-config';
 
 export default [
-	...humanmadeConfig,
-	// Your custom config overrides
+	...humanmade,
 	{
 		rules: {
-			'no-console': 'off', // Example override
+			'no-console': 'off',
 		},
 	},
 ];
 ```
 
-## Requirements
+Use this instead of `@wordpress/scripts`' own ESLint config, not alongside it — they configure the same plugins.
 
-- ESLint v9.0.0 or higher
-- Node.js 22.0.0 or higher (Latest stable recommended)
+`.ts` and `.tsx` files are not linted. Add [`typescript-eslint`](https://typescript-eslint.io/) to your own config if you need them.
 
-## Installation
+## What we change
 
-This package is an ESLint shareable configuration, and requires: `babel-eslint`, `eslint`, `eslint-config-react-app`, `eslint-plugin-flowtype`, `eslint-plugin-import`, `eslint-plugin-jsx-a11y`, `eslint-plugin-jsdoc`, `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-sort-destructure-keys`.
+We extend WordPress' `recommended-with-formatting`, which already matches our house style for indentation, quoting and most spacing. On top of it we:
 
-To install this config and the peerDependencies when using **npm 5+**:
+- Break multi-property object literals one property per line.
+- Require a space before anonymous `function` parens.
+- Omit trailing commas from function arguments.
+- Lower `no-console` to a warning.
+- Reduce `import/order` to two groups: packages by name, then local files by path. Side-effect imports are order-dependent, so they're left alone.
+- Exempt `@wordpress/*` from `import/no-unresolved`, since wp-scripts externalizes those to the WordPress runtime.
+- Add `jsx-boolean-value`, `jsx-sort-props`, `jsx-wrap-multilines` and `jsx-curly-newline`.
 
-```bash
-npx install-peerdeps --dev @humanmade/eslint-config@latest
-```
+We use `recommended-with-formatting` rather than `recommended` because `recommended` enables Prettier whenever Prettier is installed, which would disable our spacing rules depending on what else is in the tree.
 
-(Thanks to [Airbnb's package](https://www.npmjs.com/package/eslint-config-airbnb) for the command.)
+## Integration with Altis build script
 
-You can then run ESLint on your files:
-
-```shell
-npx eslint .
-```
-
-### Working with TypeScript
-
-This config already supports TypeScript files (.ts, .tsx) out of the box via the WordPress ESLint plugin. No additional setup is required.
-
-## Global Installation
-
-When installing globally, you need to ensure the peer dependencies are also installed globally.
-
-Run the same command as above, but instead with `--global`:
-
-```bash
-npx install-peerdeps --global @humanmade/eslint-config@latest
-```
-
-## Integration with Altis build script.
-
-We require the use of Node v22+ (Node v24+ recommended), however the Altis build container may ship with older versions so it may not work out of the box.
-
-As per the Altis documentation, [you can install other versions of Node using nvm](https://docs.altis-dxp.com/cloud/build-scripts/#included-build-tools), so we recommend that you add the following to your build script.
+The Altis build container may ship an older Node than we require. [Install a supported version with nvm](https://docs.altis-dxp.com/cloud/build-scripts/#included-build-tools) in your build script:
 
 ```bash
 nvm install 24
