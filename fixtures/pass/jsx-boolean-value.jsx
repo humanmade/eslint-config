@@ -2,9 +2,8 @@
 
 import React from 'react';
 
-/**
- * @returns {React.ReactNode} Rendered <A> component.
- */
+const Toggle = ( { enabled } ) => <span>{ enabled ? 'on' : 'off' }</span>;
+
 const A = () => (
-	<div foo />
+	<Toggle enabled />
 );

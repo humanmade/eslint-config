@@ -1,3 +1,4 @@
-const foo = 42;
+/* eslint-disable no-unused-vars */
 
-`${ foo }`;
+const foo = 42;
+const bottles = `${ foo } green bottles`;

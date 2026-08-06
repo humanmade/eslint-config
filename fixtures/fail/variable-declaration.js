@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/require-jsdoc */
 let obj = [ 'only assigned once' ];
 
 var str = 'default value';

@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import React from 'react';
 
 const World = () => <span>World</span>;
