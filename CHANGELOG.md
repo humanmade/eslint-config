@@ -5,6 +5,30 @@ and fill in the contents as you go. This simplifies later release management. --
 
 Changelog entries below this point have been adapted from [humanmade/coding-standards' CHANGELOG.md](https://github.com/humanmade/coding-standards/blob/main/CHANGELOG.md), where this project used to be managed as part of a monorepo.
 
+## 2.1.0 (September 9, 2025)
+
+### Breaking Changes:
+
+- Replaced the legacy `.eslintrc` configuration with an ESLint v9 flat config, published as an ES module; consumers must create an `eslint.config.js` which imports this package
+- Raised the ESLint peer dependency to `^9.0.0`, from `^5.10.0 || ^6.0.0 || ^7.0.0`
+- Raised the minimum Node version to 22 and npm to 10.8.2
+- Replaced the `eslint-config-react-app` peer dependency with `@wordpress/eslint-plugin`
+- Removed the `babel-eslint`, `eslint-plugin-flowtype`, `eslint-plugin-react-hooks` and `eslint-plugin-sort-destructure-keys` peer dependencies, and added `@babel/eslint-parser`
+- Removed the Prettier integration, along with the packaged `.prettierrc.js` and `.prettierignore`
+- `eslint-plugin-jsdoc` is no longer a peer dependency, though the config still requires it
+
+### Added:
+
+- Enforce `no-unused-vars`
+
+Versions through 1.0.0 were published as `eslint-config-humanmade`, before the package was renamed to `@humanmade/eslint-config`. There was no 2.0.0 release due to monorepo versioning issues.
+
+## 1.2.1 (September 14, 2022)
+
+- Require spaces in template strings #256
+- Raise the minimum Node version to 16 and npm to 7
+- Document running the standards under the Altis build script
+
 ## 1.1.3 (February 3, 2021)
 
 - Open ESLint peer dependency range to accept ESLint v6 & v7 #222
