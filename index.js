@@ -1,30 +1,29 @@
 import wordpress from '@wordpress/eslint-plugin';
 
+// As scoped by wp-scripts.
+const testFiles = [ '**/@(test|__tests__)/**/*.js', '**/?(*.)test.js' ];
+
 /**
  * Human Made JavaScript coding standards.
  *
- * WordPress' own config already encodes most of our house style, so we extend it
- * and keep only the deltas below. We use `recommended-with-formatting` rather
- * than `recommended`: the latter enables Prettier whenever Prettier happens to
- * be installed, which disables the spacing rules we care about and makes the
- * config's behaviour depend on the consumer's dependency tree.
+ * WordPress' config already encodes most of our house style, so we extend it and
+ * keep only the deltas. We use `recommended-with-formatting`, not `recommended`:
+ * the latter enables Prettier whenever it is installed, which would disable our
+ * spacing rules depending on the consumer's dependency tree.
  */
 export default [
 	{
 		ignores: [ '**/build/**', '**/dist/**', '**/vendor/**', '**/*.min.js' ],
 	},
 	...wordpress.configs[ 'recommended-with-formatting' ],
-	// Jest globals and rules, scoped as wp-scripts scopes them.
 	...wordpress.configs[ 'test-unit' ].map( ( config ) => ( {
 		...config,
-		files: [ '**/@(test|__tests__)/**/*.js', '**/?(*.)test.js' ],
+		files: testFiles,
 	} ) ),
 	{
-		files: [ '**/@(test|__tests__)/**/*.js', '**/?(*.)test.js' ],
+		files: testFiles,
 		rules: {
-			// Reads jest's version off disk and throws when jest isn't
-			// installed, which breaks linting test files in projects that
-			// don't use it.
+			// Reads jest's version off disk and throws when jest isn't installed.
 			'jest/no-deprecated-functions': 'off',
 		},
 	},
