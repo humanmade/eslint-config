@@ -11,9 +11,23 @@ import wordpress from '@wordpress/eslint-plugin';
  */
 export default [
 	{
-		ignores: [ 'build/**', 'dist/**', '**/*.min.js' ],
+		ignores: [ '**/build/**', '**/dist/**', '**/vendor/**', '**/*.min.js' ],
 	},
 	...wordpress.configs[ 'recommended-with-formatting' ],
+	// Jest globals and rules, scoped as wp-scripts scopes them.
+	...wordpress.configs[ 'test-unit' ].map( ( config ) => ( {
+		...config,
+		files: [ '**/@(test|__tests__)/**/*.js', '**/?(*.)test.js' ],
+	} ) ),
+	{
+		files: [ '**/@(test|__tests__)/**/*.js', '**/?(*.)test.js' ],
+		rules: {
+			// Reads jest's version off disk and throws when jest isn't
+			// installed, which breaks linting test files in projects that
+			// don't use it.
+			'jest/no-deprecated-functions': 'off',
+		},
+	},
 	{
 		// Also brings .jsx and .mjs into scope; ESLint only lints .js by default.
 		files: [ '**/*.{js,mjs,cjs,jsx}' ],
