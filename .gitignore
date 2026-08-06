@@ -1,16 +1,9 @@
-# Ignore composer things.
-vendor/
-composer.lock
+# Ignore editor things.
 .idea/
 
 # Ignore node things.
 node_modules/
 yarn.lock
 
-# Ignore built files
-archives/
-phpcs-standard/
-
 # OS generated files
 .DS_Store
-.phpunit.result.cache
