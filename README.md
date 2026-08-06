@@ -1,5 +1,8 @@
 # @humanmade/eslint-config
 
+[![npm](https://img.shields.io/npm/v/@humanmade/eslint-config)](https://www.npmjs.com/package/@humanmade/eslint-config)
+[![Tests](https://github.com/humanmade/eslint-config/actions/workflows/test.yml/badge.svg)](https://github.com/humanmade/eslint-config/actions/workflows/test.yml)
+
 Human Made coding standards for JavaScript, for ESLint v9+ using flat config format.
 
 ## Usage
@@ -75,3 +78,7 @@ As per the Altis documentation, [you can install other versions of Node using nv
 nvm install 24
 nvm use 24
 ```
+
+## Contributing
+
+We welcome contributions to these standards. See [CONTRIBUTING.md](CONTRIBUTING.md) for how rule changes are decided, tested and released.
