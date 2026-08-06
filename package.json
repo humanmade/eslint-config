@@ -13,14 +13,13 @@
 		"linter",
 		"humanmade"
 	],
-	"homepage": "https://github.com/humanmade/coding-standards/tree/master/packages/eslint-config-humanmade#readme",
+	"homepage": "https://github.com/humanmade/eslint-config#readme",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/humanmade/coding-standards.git",
-		"directory": "packages/eslint-config-humanmade"
+		"url": "git+https://github.com/humanmade/eslint-config.git"
 	},
 	"bugs": {
-		"url": "https://github.com/humanmade/coding-standards/issues"
+		"url": "https://github.com/humanmade/eslint-config/issues"
 	},
 	"engines": {
 		"npm": ">=10.8.2",
