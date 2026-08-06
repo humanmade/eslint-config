@@ -5,6 +5,24 @@ and fill in the contents as you go. This simplifies later release management. --
 
 Changelog entries below this point have been adapted from [humanmade/coding-standards' CHANGELOG.md](https://github.com/humanmade/coding-standards/blob/main/CHANGELOG.md), where this project used to be managed as part of a monorepo.
 
+## Unreleased
+
+### Breaking Changes:
+
+- Extend `@wordpress/eslint-plugin`'s `recommended-with-formatting` instead of restating its rules. WP rules we never enabled now apply, including `camelcase`, `curly`, `no-shadow`, `no-else-return`, `prefer-const`, `react-hooks/*`, the `@wordpress/*` custom rules and JSDoc content checks
+- `arrow-parens` requires parens, matching WP; it was `as-needed`
+- `no-var` is an error rather than a warning
+- `jsdoc/require-jsdoc` is no longer enforced. WP's config turns it off, as did every project of ours we checked
+- Reduce `import/order` to two groups, packages by name then local files by path, and stop sorting `@wordpress/*` separately #297
+- Enable `import/no-unresolved`, exempting `@wordpress/*` since wp-scripts externalizes them. It was off
+- Stop matching `.ts` and `.tsx`. They were matched with no parser configured, so linting them never worked
+- Require ESLint 9 or 10
+
+### Enhancements:
+
+- Plugins ship as dependencies, so installing needs neither `install-peerdeps` nor `--legacy-peer-deps` #301
+- Drop the `npm` engines constraint; only Node is pinned
+
 ## 2.1.0 (September 9, 2025)
 
 ### Breaking Changes:
