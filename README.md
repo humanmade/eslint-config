@@ -23,21 +23,22 @@ Every plugin the config uses ships with it. ESLint is the only peer dependency.
 Create an `eslint.config.js` in your project root:
 
 ```js
-import humanmade from '@humanmade/eslint-config';
+import humanmadeConfig from '@humanmade/eslint-config';
 
-export default humanmade;
+export default humanmadeConfig;
 ```
 
 To override:
 
 ```js
-import humanmade from '@humanmade/eslint-config';
+import humanmadeConfig from '@humanmade/eslint-config';
 
 export default [
-	...humanmade,
+	...humanmadeConfig,
+	// Other custom config overrides
 	{
 		rules: {
-			'no-console': 'off',
+			'no-console': 'off', // Example override
 		},
 	},
 ];
