@@ -82,3 +82,7 @@ nvm use 24
 ## Contributing
 
 We welcome contributions to these standards. See [CONTRIBUTING.md](CONTRIBUTING.md) for how rule changes are decided, tested and released.
+
+## License
+
+GNU General Public License v2.0 or later. See [LICENSE](LICENSE).
