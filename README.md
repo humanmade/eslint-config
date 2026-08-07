@@ -13,20 +13,22 @@ Human Made coding standards for JavaScript, layered over [`@wordpress/eslint-plu
 ## Installation
 
 ```bash
-npm install --save-dev @humanmade/eslint-config
+npm install --save-dev eslint@^10 @humanmade/eslint-config
 ```
 
-Every plugin the config uses ships with it. ESLint is the only peer dependency.
+Every plugin the config uses ships with it. ESLint is the only peer dependency, but to get ESLint 10 (not 9) we need to install that version explicitly to work around a transative dependency inside `@wordpress/eslint-plugin`. Since `@wordpress/scripts` depends on ESLint 10, this combination of packages can be used alongside `wp-scripts` without `wp-scripts lint-js` and `npx eslint` running different ones.
 
 ## Usage
 
-Create an `eslint.config.js` in your project root:
+Create an `eslint.config.mjs` in your project root:
 
 ```js
 import humanmadeConfig from '@humanmade/eslint-config';
 
 export default humanmadeConfig;
 ```
+
+The `.mjs` extension keeps Node from reparsing the config on every run. Use `eslint.config.js` only if your project's `package.json` sets `"type": "module"`.
 
 To override:
 
