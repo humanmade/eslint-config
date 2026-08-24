@@ -1,55 +1,37 @@
 import wordpress from '@wordpress/eslint-plugin';
-import importPlugin from 'eslint-plugin-import';
-import jsdocPlugin from 'eslint-plugin-jsdoc';
-import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
-import reactPlugin from 'eslint-plugin-react';
+
+// As scoped by wp-scripts.
+const testFiles = [ '**/@(test|__tests__)/**/*.js', '**/?(*.)test.js' ];
 
 /**
- * ESLint v9 Flat Config for Human Made Coding Standards
+ * Human Made JavaScript coding standards.
+ *
+ * WordPress' config already encodes most of our house style, so we extend it and
+ * keep only the deltas. We use `recommended-with-formatting`, not `recommended`:
+ * the latter enables Prettier whenever it is installed, which would disable our
+ * spacing rules depending on the consumer's dependency tree.
  */
 export default [
-	// Apply to JavaScript and TypeScript files
 	{
-		files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
-		languageOptions: {
-			ecmaVersion: 2024,
-			sourceType: 'module',
-			parserOptions: {
-				ecmaFeatures: {
-					jsx: true,
-				},
-			},
-			globals: {
-				// Browser environment
-				window: 'readonly',
-				document: 'readonly',
-				console: 'readonly',
-				// ES6 globals
-				Promise: 'readonly',
-				Map: 'readonly',
-				Set: 'readonly',
-			},
-		},
-		plugins: {
-			'@wordpress': wordpress,
-			import: importPlugin,
-			jsdoc: jsdocPlugin,
-			'jsx-a11y': jsxA11yPlugin,
-			react: reactPlugin,
-		},
+		ignores: [ '**/build/**', '**/dist/**', '**/vendor/**', '**/*.min.js' ],
+	},
+	...wordpress.configs[ 'recommended-with-formatting' ],
+	...wordpress.configs[ 'test-unit' ].map( ( config ) => ( {
+		...config,
+		files: testFiles,
+	} ) ),
+	{
+		files: testFiles,
 		rules: {
-			// All formatting and code quality rules from master branch
-			'array-bracket-spacing': ['error', 'always'],
-			'arrow-parens': ['error', 'as-needed'],
-			'arrow-spacing': [
-				'error',
-				{
-					before: true,
-					after: true,
-				},
-			],
-			'block-spacing': ['error'],
-			'brace-style': ['error', '1tbs'],
+			// Reads jest's version off disk and throws when jest isn't installed.
+			'jest/no-deprecated-functions': 'off',
+		},
+	},
+	{
+		// Also brings .jsx and .mjs into scope; ESLint only lints .js by default.
+		files: [ '**/*.{js,mjs,cjs,jsx}' ],
+		rules: {
+			// Spacing and layout preferences beyond WordPress'.
 			'comma-dangle': [
 				'error',
 				{
@@ -60,49 +42,7 @@ export default [
 					functions: 'never',
 				},
 			],
-			'comma-spacing': [
-				'error',
-				{
-					before: false,
-					after: true,
-				},
-			],
-			'eol-last': ['error', 'unix'],
-			'eqeqeq': ['error'],
-			'func-call-spacing': ['error'],
-			'indent': [
-				'error',
-				'tab',
-				{
-					SwitchCase: 1,
-				},
-			],
-			'key-spacing': [
-				'error',
-				{
-					beforeColon: false,
-					afterColon: true,
-				},
-			],
-			'keyword-spacing': [
-				'error',
-				{
-					after: true,
-					before: true,
-				},
-			],
-			'linebreak-style': ['error', 'unix'],
-			'no-console': ['warn'],
-			'no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],
-			'no-multiple-empty-lines': [
-				'error',
-				{
-					max: 1,
-				},
-			],
-			'no-trailing-spaces': ['error'],
-			'no-unused-vars': ['error'],
-			'no-var': ['warn'],
+			'no-mixed-spaces-and-tabs': [ 'error', 'smart-tabs' ],
 			'object-curly-newline': [
 				'error',
 				{
@@ -126,17 +66,7 @@ export default [
 					},
 				},
 			],
-			'object-curly-spacing': ['error', 'always'],
-			'object-property-newline': ['error'],
-			'quotes': ['error', 'single'],
-			'semi': ['error', 'always'],
-			'semi-spacing': [
-				'error',
-				{
-					before: false,
-					after: true,
-				},
-			],
+			'object-property-newline': 'error',
 			'space-before-function-paren': [
 				'error',
 				{
@@ -145,70 +75,36 @@ export default [
 					named: 'never',
 				},
 			],
-			'space-in-parens': [
-				'warn',
-				'always',
-				{
-					exceptions: ['empty'],
-				},
-			],
-			'space-unary-ops': [
-				'error',
-				{
-					words: true,
-					nonwords: false,
-					overrides: {
-						'!': true,
-					},
-				},
-			],
-			'template-curly-spacing': ['error', 'always'],
-			'yoda': ['error', 'never'],
+			yoda: [ 'error', 'never' ],
 
-			// Import/Export Rules
-			'import/no-unresolved': ['off'],
+			// Worth flagging in review, not worth failing a build over.
+			'no-console': 'warn',
+
+			// Two enforced groups: packages by name, then local files by path.
+			// Side-effect imports are order-dependent, so they are left alone.
+			// See humanmade/coding-standards#297.
 			'import/order': [
 				'error',
 				{
+					groups: [
+						[ 'builtin', 'external' ],
+						[ 'internal', 'parent', 'sibling', 'index' ],
+					],
+					'newlines-between': 'always',
 					alphabetize: {
 						order: 'asc',
 						caseInsensitive: true,
 					},
-					groups: ['builtin', 'external', 'parent', 'sibling', 'index'],
-					'newlines-between': 'always',
-					pathGroups: [
-						{
-							pattern: '@wordpress/**',
-							group: 'external',
-							position: 'after',
-						},
-					],
-					pathGroupsExcludedImportTypes: ['builtin'],
 				},
 			],
 
-			// JSDoc Rules
-			'jsdoc/require-jsdoc': [
-				'error',
-				{
-					require: {
-						FunctionDeclaration: true,
-						ClassDeclaration: true,
-						ArrowFunctionExpression: true,
-						FunctionExpression: true,
-					},
-				},
-			],
+			// wp-scripts externalizes @wordpress/* to the WordPress runtime, so
+			// these are imported without ever appearing in package.json.
+			'import/no-unresolved': [ 'error', { ignore: [ '^@wordpress/' ] } ],
+			'import/no-extraneous-dependencies': 'off',
 
-			// React/JSX Rules
-			'react/jsx-curly-spacing': [
-				'error',
-				{
-					when: 'always',
-					children: true,
-				},
-			],
-			'react/jsx-wrap-multilines': ['error'],
+			// JSX preferences beyond WordPress'.
+			'react/jsx-boolean-value': [ 'error', 'never' ],
 			'react/jsx-curly-newline': [
 				'warn',
 				{
@@ -216,20 +112,15 @@ export default [
 					singleline: 'consistent',
 				},
 			],
-			'react/jsx-boolean-value': ['error', 'never'],
 			'react/jsx-sort-props': [
 				'warn',
 				{
-					reservedFirst: ['key', 'ref'],
+					reservedFirst: [ 'key', 'ref' ],
 					callbacksLast: true,
 					ignoreCase: true,
 				},
 			],
-			'jsx-a11y/anchor-is-valid': ['error'],
+			'react/jsx-wrap-multilines': 'error',
 		},
-	},
-	// Ignore patterns
-	{
-		ignores: ['node_modules/**', 'dist/**', 'build/**', '*.min.js'],
 	},
 ];
